@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-    public float life = 5f;
+    public float life = 3f;
 
     private void Awake()
     {
