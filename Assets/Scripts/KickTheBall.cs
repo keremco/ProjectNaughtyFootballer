@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -47,6 +47,8 @@ public class KickTheBall : MonoBehaviour
 
         totalShoot--;
 
+        GameManager.instance.UpdateBall(totalShoot);
+
         Invoke(nameof(ResetShoot), shootCooldown);
     }
 
@@ -54,4 +56,5 @@ public class KickTheBall : MonoBehaviour
     {
         readyToShoot = true;
     }
+    
 }
