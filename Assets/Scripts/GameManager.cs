@@ -7,8 +7,10 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     private int score = 0;
+    private int totalObjectLife = 0;
     public Text scoreCounter;
     public Text ballCounter;
+    public Text ObjectLife;
 
     void Awake()
     {
@@ -25,7 +27,6 @@ public class GameManager : MonoBehaviour
 
     public void UpdateScore(int amount)
     {
-        // Skoru güncelle ve metin nesnesine yansıt
         score += amount;
         if (scoreCounter != null)
         {
@@ -35,6 +36,24 @@ public class GameManager : MonoBehaviour
 
     public void UpdateBall(int amount)
     {
-        ballCounter.text = amount.ToString() + " ball left...";
+        ballCounter.text = amount.ToString();
+    }
+
+    public void TotalObjectLife(int amount)
+    {
+        if(amount < 3 || amount == 0)
+        {
+            totalObjectLife--;
+        }
+        else if (amount == 3)
+        {
+            totalObjectLife += amount;
+        }
+        
+        if (ObjectLife != null)
+        {
+            ObjectLife.text = totalObjectLife.ToString();
+        }
+
     }
 }

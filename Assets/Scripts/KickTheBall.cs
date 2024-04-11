@@ -18,6 +18,8 @@ public class KickTheBall : MonoBehaviour
     public float shootForce;
     public float shootUpwardForce;
 
+    [SerializeField] public Animator animator;
+
     bool readyToShoot;
 
     private void Start()
@@ -27,15 +29,19 @@ public class KickTheBall : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(shootKey) && readyToShoot && totalShoot > 0)
-        {
-            Shoot();
-        }
+        GameManager.instance.UpdateBall(totalShoot);
+
+        if (Input.GetKeyDown(shootKey) && readyToShoot && totalShoot > 0)
+            {
+                Shoot();
+            }
     }
 
     private void Shoot()
     {
         readyToShoot = false;
+
+        animator.SetBool("shoot", true);
 
         GameObject projectile = Instantiate(ball, shootingPoint.position, cam.rotation);
 
@@ -47,13 +53,12 @@ public class KickTheBall : MonoBehaviour
 
         totalShoot--;
 
-        GameManager.instance.UpdateBall(totalShoot);
-
         Invoke(nameof(ResetShoot), shootCooldown);
     }
 
     private void ResetShoot()
     {
+        animator.SetBool("shoot", false);
         readyToShoot = true;
     }
     

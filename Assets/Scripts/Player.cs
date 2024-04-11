@@ -5,22 +5,20 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
 {
+    [SerializeField] public Animator animator;
 
     public Camera playerCamera;
     public float walkSpeed = 3f;
 
-    public float gravity = 10f;
     public float lookSpeed = 2f;
     public float lookXLimit = 45f;
-    public float defaultHeight = 2f;
-
 
     private Vector3 moveDirection = Vector3.zero;
     private float rotationX = 0;
     private CharacterController characterController;
 
     private bool canMove = true;
-
+    
     void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -30,11 +28,21 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
 
         float curSpeedX = canMove ? walkSpeed * Input.GetAxis("Vertical") : 0;
         float curSpeedY = canMove ? walkSpeed * Input.GetAxis("Horizontal") : 0;
+
+        if (Input.GetAxis("Horizontal") != 0f || Input.GetAxis("Vertical") != 0f)
+        {
+            animator.SetBool("walk", true);
+        } else
+        {
+            animator.SetBool("walk", false);
+        }
+
         float movementDirectionY = moveDirection.y;
         moveDirection = (forward * curSpeedX) + (right * curSpeedY);
 
@@ -48,5 +56,6 @@ public class Player : MonoBehaviour
             playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
             transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
         }
+        
     }
 }

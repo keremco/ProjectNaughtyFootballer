@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ObjectMovementChecker : MonoBehaviour
 {
+
     private Vector3 initialPosition;
     private Quaternion initialRotation;
     
@@ -21,10 +22,12 @@ public class ObjectMovementChecker : MonoBehaviour
     {
         initialPosition = transform.position;
         initialRotation = transform.rotation;
+        GameManager.instance.TotalObjectLife(touchCount);
     }
 
     void FixedUpdate()
     {
+
         if (!touched)
         {
             if (coolDownTimer > 0)
@@ -59,6 +62,8 @@ public class ObjectMovementChecker : MonoBehaviour
                 coolDownTimer = Cooldown;
                 touched = false;
                 GameManager.instance.UpdateScore(score);
+                GameManager.instance.TotalObjectLife(touchCount);
+
             }
         }
     }
