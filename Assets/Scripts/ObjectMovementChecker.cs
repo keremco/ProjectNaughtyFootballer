@@ -18,6 +18,13 @@ public class ObjectMovementChecker : MonoBehaviour
     private float Cooldown = 1f;
     private float coolDownTimer;
 
+    AudioManager audioManager;
+    bool takePointDone = false;
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
     void Start()
     {
         initialPosition = transform.position;
@@ -45,27 +52,37 @@ public class ObjectMovementChecker : MonoBehaviour
 
                 score += 1;
 
-                    if (rollCount > 0)
-                    {
-                        Vector3 positionChange = transform.position - initialPosition;
-                        float positionChangeScore = positionChange.magnitude * 1000f;
-                        int positionScore = Mathf.RoundToInt(positionChangeScore);
+                if (rollCount > 0)
+                {
+                    Vector3 positionChange = transform.position - initialPosition;
+                    float positionChangeScore = positionChange.magnitude * 1000f;
+                    int positionScore = Mathf.RoundToInt(positionChangeScore);
 
-                        Quaternion rotationChange = Quaternion.Euler(transform.rotation.eulerAngles - initialRotation.eulerAngles);
-                        float rotationChangeScore = rotationChange.eulerAngles.magnitude * 2f;
-                        int rotationScore = Mathf.RoundToInt(rotationChangeScore);
+                    Quaternion rotationChange = Quaternion.Euler(transform.rotation.eulerAngles - initialRotation.eulerAngles);
+                    float rotationChangeScore = rotationChange.eulerAngles.magnitude * 2f;
+                    int rotationScore = Mathf.RoundToInt(rotationChangeScore);
 
-                        score += rotationScore + positionScore;
-                        rollCount--;
-                    }
+                    score += rotationScore + positionScore;
+                    rollCount--;
+                }
                 touchCount--;
                 coolDownTimer = Cooldown;
                 touched = false;
+                audioManager.PlaySFX(audioManager.collectPoints);
                 GameManager.instance.UpdateScore(score);
                 GameManager.instance.TotalObjectLife(touchCount);
-
+                if (touchCount == 0) takePointDone = true;
             }
+
         }
+
+        if (takePointDone)
+        {
+            takePointDone = false;
+            audioManager.PlaySFX(audioManager.takePointDone);
+
+        }
+        
     }
 
     bool IsTouchingBallObject()
@@ -78,6 +95,7 @@ public class ObjectMovementChecker : MonoBehaviour
             if (topObject.GetComponent<Collider>().bounds.Intersects(GetComponent<Collider>().bounds))
             {
                 return true;
+                
             }
         }
         return false;

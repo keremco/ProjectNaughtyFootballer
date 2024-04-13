@@ -17,13 +17,38 @@ public class Player : MonoBehaviour
     private float rotationX = 0;
     private CharacterController characterController;
 
+    AudioManager audioManager;
+
     private bool canMove = true;
-    
+
+    private float Cooldown = 1f;
+    private float coolDownTimer;
+
+
     void Start()
     {
         characterController = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
+
+    private void FixedUpdate()
+    {
+        if (Input.GetAxis("Horizontal") != 0f || Input.GetAxis("Vertical") != 0f)
+        {
+            animator.SetBool("walk", true);
+            WalkSound();
+        }
+        else
+        {
+            animator.SetBool("walk", false);
+        }
+        coolDownTimer = Cooldown;
     }
 
     void Update()
@@ -34,14 +59,6 @@ public class Player : MonoBehaviour
 
         float curSpeedX = canMove ? walkSpeed * Input.GetAxis("Vertical") : 0;
         float curSpeedY = canMove ? walkSpeed * Input.GetAxis("Horizontal") : 0;
-
-        if (Input.GetAxis("Horizontal") != 0f || Input.GetAxis("Vertical") != 0f)
-        {
-            animator.SetBool("walk", true);
-        } else
-        {
-            animator.SetBool("walk", false);
-        }
 
         float movementDirectionY = moveDirection.y;
         moveDirection = (forward * curSpeedX) + (right * curSpeedY);
@@ -57,5 +74,19 @@ public class Player : MonoBehaviour
             transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
         }
         
+    }
+
+    void WalkSound()
+    {
+        if (coolDownTimer > 0)
+        {
+            coolDownTimer -= Time.deltaTime;
+        }
+
+        if (coolDownTimer < 0)
+        {
+            coolDownTimer = 0;
+            audioManager.PlaySFX(audioManager.walking);
+        }
     }
 }

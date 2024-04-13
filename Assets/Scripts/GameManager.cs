@@ -1,20 +1,34 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+
     public static GameManager instance;
     private int score = 0;
+    private int bestScore = 0;
     private int totalObjectLife = 0;
-    public Text scoreCounter;
+
+    [Header("In Game")]
     public Text ballCounter;
     public Text ObjectLife;
+    public Text scoreCounter;
+
+    [Header("In Game Menu")]
+    public Text inGameMenuScoreCounter;
+    public Text inGameMenuBestScore;
+
+    [Header("In Finish Menu")]
+    public Text finishMenuBallCounter;
+    public Text finishMenuHitCounter;
+    public Text finishMenuBestScore;
+    public Text finishMenuScore;
+
+    int ballLeft, objectLifeLeft;
+
 
     void Awake()
     {
-        // GameManager instance'ını ayarla
         if (instance == null)
         {
             instance = this;
@@ -23,7 +37,36 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
     }
+    private void Start()
+    {
+
+        bestScore = PlayerPrefs.GetInt("househighscore", bestScore);
+
+        inGameMenuBestScore.text = bestScore.ToString();
+        finishMenuBestScore.text = bestScore.ToString();
+    }
+
+    private void Update()
+    {
+        if (score > bestScore)
+        {
+            bestScore = score;
+            inGameMenuBestScore.text = "" + score;
+            finishMenuBestScore.text = "" + score;
+
+            PlayerPrefs.SetInt("househighscore", bestScore);
+        }
+    }
+
+    /*
+    void OnDestroy()
+    {
+        PlayerPrefs.SetInt("househighscore", bestScore);
+        PlayerPrefs.Save();
+    }
+    */
 
     public void UpdateScore(int amount)
     {
@@ -31,12 +74,17 @@ public class GameManager : MonoBehaviour
         if (scoreCounter != null)
         {
             scoreCounter.text = score.ToString();
+            inGameMenuScoreCounter.text = score.ToString();
+            finishMenuScore.text = score.ToString();
         }
     }
 
     public void UpdateBall(int amount)
     {
         ballCounter.text = amount.ToString();
+        finishMenuBallCounter.text = amount.ToString();
+
+        ballLeft = amount;
     }
 
     public void TotalObjectLife(int amount)
@@ -53,7 +101,13 @@ public class GameManager : MonoBehaviour
         if (ObjectLife != null)
         {
             ObjectLife.text = totalObjectLife.ToString();
+            finishMenuHitCounter.text = totalObjectLife.ToString();
+            objectLifeLeft = amount;
         }
 
     }
+
+    public int BallLeft() { return ballLeft; }
+    public int ObjectLifeLeft() { return objectLifeLeft; }
+
 }
