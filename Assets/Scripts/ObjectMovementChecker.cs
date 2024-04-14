@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ObjectMovementChecker : MonoBehaviour
 {
@@ -19,11 +20,18 @@ public class ObjectMovementChecker : MonoBehaviour
     private float coolDownTimer;
 
     AudioManager audioManager;
+    Outline outline;
+
     bool takePointDone = false;
 
     private void Awake()
     {
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+        outline = gameObject.AddComponent<Outline>();
+
+        outline.OutlineMode = Outline.Mode.OutlineAll;
+        outline.OutlineColor = Color.yellow;
+        outline.OutlineWidth = 3f;
     }
     void Start()
     {
@@ -78,6 +86,7 @@ public class ObjectMovementChecker : MonoBehaviour
 
         if (takePointDone)
         {
+            outline.OutlineWidth = 0f;
             takePointDone = false;
             audioManager.PlaySFX(audioManager.takePointDone);
 

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -21,7 +19,7 @@ public class Player : MonoBehaviour
 
     private bool canMove = true;
 
-    private float Cooldown = 1f;
+    private float Cooldown = 0.1f;
     private float coolDownTimer;
 
 
@@ -30,6 +28,7 @@ public class Player : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        
     }
 
     private void Awake()
@@ -42,7 +41,7 @@ public class Player : MonoBehaviour
         if (Input.GetAxis("Horizontal") != 0f || Input.GetAxis("Vertical") != 0f)
         {
             animator.SetBool("walk", true);
-            WalkSound();
+            //WalkSound();
         }
         else
         {
@@ -53,7 +52,6 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
 
@@ -75,7 +73,7 @@ public class Player : MonoBehaviour
         }
         
     }
-
+    /*
     void WalkSound()
     {
         if (coolDownTimer > 0)
@@ -89,4 +87,5 @@ public class Player : MonoBehaviour
             audioManager.PlaySFX(audioManager.walking);
         }
     }
+    */
 }

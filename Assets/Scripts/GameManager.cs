@@ -15,7 +15,6 @@ public class GameManager : MonoBehaviour
     public Text scoreCounter;
 
     [Header("In Game Menu")]
-    public Text inGameMenuScoreCounter;
     public Text inGameMenuBestScore;
 
     [Header("In Finish Menu")]
@@ -24,8 +23,7 @@ public class GameManager : MonoBehaviour
     public Text finishMenuBestScore;
     public Text finishMenuScore;
 
-    int ballLeft, objectLifeLeft;
-
+    int ballLeft;
 
     void Awake()
     {
@@ -46,6 +44,7 @@ public class GameManager : MonoBehaviour
 
         inGameMenuBestScore.text = bestScore.ToString();
         finishMenuBestScore.text = bestScore.ToString();
+
     }
 
     private void Update()
@@ -57,16 +56,9 @@ public class GameManager : MonoBehaviour
             finishMenuBestScore.text = "" + score;
 
             PlayerPrefs.SetInt("househighscore", bestScore);
+            PlayerPrefs.SetInt("houseHighScoresBallCount", ballLeft);
         }
     }
-
-    /*
-    void OnDestroy()
-    {
-        PlayerPrefs.SetInt("househighscore", bestScore);
-        PlayerPrefs.Save();
-    }
-    */
 
     public void UpdateScore(int amount)
     {
@@ -74,7 +66,6 @@ public class GameManager : MonoBehaviour
         if (scoreCounter != null)
         {
             scoreCounter.text = score.ToString();
-            inGameMenuScoreCounter.text = score.ToString();
             finishMenuScore.text = score.ToString();
         }
     }
@@ -95,19 +86,19 @@ public class GameManager : MonoBehaviour
         }
         else if (amount == 3)
         {
-            totalObjectLife += amount;
+            //totalObjectLife += amount;
+            totalObjectLife = 3;
         }
         
         if (ObjectLife != null)
         {
             ObjectLife.text = totalObjectLife.ToString();
             finishMenuHitCounter.text = totalObjectLife.ToString();
-            objectLifeLeft = amount;
         }
 
     }
-
+    public int gameStart() { return score;  }
     public int BallLeft() { return ballLeft; }
-    public int ObjectLifeLeft() { return objectLifeLeft; }
+    public int ObjectLifeLeft() { return totalObjectLife; }
 
 }
