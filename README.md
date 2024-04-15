@@ -29,7 +29,7 @@ Totally It took around 60+ Hours,
 
 -6+ Hours for Level Designing
 
--5+ Hours for Creating Needed Image from AI Tools and Editing with Photoshop
+-5+ Hours for UI, Creating Needed Image from AI Tools and Editing with Photoshop
 
 -1+ Hour for Creating Game Music in AI Tools
 
