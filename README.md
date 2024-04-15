@@ -1,4 +1,5 @@
 <br/>
+<meta data=gamecircle>
 <div align="center">
 <img src="https://img.itch.zone/aW1hZ2UvMjY0NzM3Ny8xNTc3NzM1MC5qcGVn/original/M3izgv.jpeg" alt="Logo" width="80" height="80">
 </a>
