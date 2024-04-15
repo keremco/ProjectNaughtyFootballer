@@ -35,6 +35,7 @@ public class ObjectMovementChecker : MonoBehaviour
     }
     void Start()
     {
+        Mesh mesh = GetComponent<MeshFilter>().sharedMesh;
         initialPosition = transform.position;
         initialRotation = transform.rotation;
         GameManager.instance.TotalObjectLife(touchCount);

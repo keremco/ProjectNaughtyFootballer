@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     private int score = 0;
     private int bestScore = 0;
+    private int lastScoreBall = 0;
+    private int totalBall = 0;
     private int totalObjectLife = 0;
 
     [Header("In Game")]
@@ -24,6 +26,7 @@ public class GameManager : MonoBehaviour
     public Text finishMenuScore;
 
     int ballLeft;
+    bool gameOver;
 
     void Awake()
     {
@@ -41,7 +44,7 @@ public class GameManager : MonoBehaviour
     {
 
         bestScore = PlayerPrefs.GetInt("househighscore", bestScore);
-
+        
         inGameMenuBestScore.text = bestScore.ToString();
         finishMenuBestScore.text = bestScore.ToString();
 
@@ -49,15 +52,20 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (score > bestScore)
+        if (score > bestScore && gameOver == true)
         {
             bestScore = score;
             inGameMenuBestScore.text = "" + score;
             finishMenuBestScore.text = "" + score;
 
+            lastScoreBall = totalBall - ballLeft;
+            
+            PlayerPrefs.SetInt("houseHighscoreBall", lastScoreBall);
             PlayerPrefs.SetInt("househighscore", bestScore);
-            PlayerPrefs.SetInt("houseHighScoresBallCount", ballLeft);
         }
+
+        
+
     }
 
     public void UpdateScore(int amount)
@@ -76,6 +84,7 @@ public class GameManager : MonoBehaviour
         finishMenuBallCounter.text = amount.ToString();
 
         ballLeft = amount;
+
     }
 
     public void TotalObjectLife(int amount)
@@ -86,16 +95,24 @@ public class GameManager : MonoBehaviour
         }
         else if (amount == 3)
         {
-            //totalObjectLife += amount;
-            totalObjectLife = 3;
+            totalObjectLife += amount;
         }
-        
+
         if (ObjectLife != null)
         {
             ObjectLife.text = totalObjectLife.ToString();
             finishMenuHitCounter.text = totalObjectLife.ToString();
         }
 
+    }
+    public void SetBallBegin(int amount) 
+    {
+        totalBall = amount;
+    }
+
+    public void GameOver(bool finish)
+    {
+        gameOver = finish;
     }
     public int gameStart() { return score;  }
     public int BallLeft() { return ballLeft; }

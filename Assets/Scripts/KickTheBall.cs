@@ -20,6 +20,8 @@ public class KickTheBall : MonoBehaviour
     public float shootUpwardForce;
 
     int escapePress = 0;
+    int hitCount;
+    int minBallCount = 0;
 
     AudioManager audioManager;
 
@@ -35,11 +37,12 @@ public class KickTheBall : MonoBehaviour
     {
         readyToShoot = true;
         Invoke(nameof(ShootNumber), 0.01f);
-
     }
 
     private void Update()
     {
+        hitCount = GameManager.instance.ObjectLifeLeft();
+
         if (Input.GetKeyDown("escape") && escapePress == 0)
         {
             escapePress = 1;
@@ -50,11 +53,12 @@ public class KickTheBall : MonoBehaviour
         }
 
         GameManager.instance.UpdateBall(totalShoot);
-        if (Input.GetKeyDown(shootKey) && escapePress == 0 && readyToShoot && totalShoot > 0)
+        if (Input.GetKeyDown(shootKey) && escapePress == 0 && (hitCount > 0) && readyToShoot && totalShoot > 0)
                  {
                     Shoot();
                     audioManager.PlaySFX(audioManager.ballKick);
                  }
+
     }
 
     private void Shoot()
@@ -71,28 +75,32 @@ public class KickTheBall : MonoBehaviour
 
         projectileRb.AddForce(forceToAdd, ForceMode.Impulse);
 
-        totalShoot--;
-
         Invoke(nameof(ResetShoot), shootCooldown);
+
+       
     }
 
     private void ResetShoot()
     {
         animator.SetBool("shoot", false);
+        totalShoot--;
         readyToShoot = true;
+        GameManager.instance.UpdateBall(totalShoot);
+
     }
 
     
     private int ShootNumber()
-    {
-        /*
-        int a = 0;
-        PlayerPrefs.GetInt("houseHighScoresBallCount", a);
-        if(a <= 0) { a = obj; }
-        */
+    { 
+
+        minBallCount = PlayerPrefs.GetInt("houseHighscoreBall", minBallCount);
         obj = GameManager.instance.ObjectLifeLeft();
-        totalShoot = Mathf.RoundToInt(Random.Range(obj,obj*2));
-        //totalShoot = 5;
+        if (minBallCount == 0) minBallCount = obj;
+       
+        totalShoot = Mathf.RoundToInt(Random.Range(minBallCount, (obj+(minBallCount/2))));
+        
+        GameManager.instance.SetBallBegin(totalShoot);
+        
         return totalShoot;
     }
     

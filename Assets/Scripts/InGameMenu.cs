@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -15,10 +16,9 @@ public class InGameMenu : MonoBehaviour
     int ballLeft, objectLifeLeft;
     
     bool ballLeftFinish = false;
-    int finished = 0;
-    int escapePress = 0;
+    bool finished = false;
+    bool escapePress = false;
     int gameStart = 0;
-
     AudioManager audioManager;
 
     private float nextJob = 1f;
@@ -43,46 +43,43 @@ public class InGameMenu : MonoBehaviour
         ballLeft = GameManager.instance.BallLeft();
         objectLifeLeft = GameManager.instance.ObjectLifeLeft();
         gameStart = GameManager.instance.gameStart();
+
         
-        if (finished == 0)
+
+        if (finished == false)
         {
-            if (Input.GetKeyDown("escape") && escapePress == 0)
+            if (Input.GetKeyDown("escape") && escapePress == false)
             {
-                escapePress = 1;
-                Pause();
-                
+                escapePress = true;
+                PauseOrFinish();
             }
-            else if (Input.GetKeyDown("escape") && escapePress == 1)
+            else if (Input.GetKeyDown("escape") && escapePress == true)
             {
-                escapePress = 0;
+                escapePress = false;
                 ToCancel();
+
             }
         }
 
         if ((ballLeft == 0 || objectLifeLeft == 0) && Time.time > nextJob)
         {
-            if (lateWork == 1) doneOrWhat();
-            //Debug.Log("DoneOrWhat");
+            if (lateWork == 1)
+            {
+                doneOrWhat();
+            }
             nextJob = Time.time + jobDelay;
             lateWork = 1;
         }
 
     }
-    
-    public void Pause()
-    {
-
-        Time.timeScale = 0;
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-        Panel.SetActive(true);
-        inGameMenu.SetActive(true);
-    }
 
     public void ToCancel()
     {
-        inGameMenu.SetActive(false);
-        Panel.SetActive(false);
+        if (Input.GetKeyDown("escape") && escapePress == false && finished == false)
+        {
+            inGameMenu.SetActive(false);
+            Panel.SetActive(false);
+        }
         Time.timeScale = 1;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -90,45 +87,46 @@ public class InGameMenu : MonoBehaviour
 
     public void doneOrWhat()
     {
-
-        finished = 1;
         if (gameStart == 0 || (ballLeft == 0 && objectLifeLeft > 0))
         {
             ballLeftFinish = true;
         }
-        Finish();
-
-        /*
-        if (objectLifeLeft == 0 || ballLeft == 0)
-        {
-            
-        }
-        */
+        finished = true;
+        PauseOrFinish();
     }
-    public void Finish()
-    {
-
-        escapePress = 1;
+    public void PauseOrFinish()
+    { 
         Time.timeScale = 0;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        Panel.SetActive(true);
+        
 
-        FootballerKidLogo.SetActive(false);
-        FinishMenu.SetActive(true);
-
-        if (ballLeftFinish)
+        if(Input.GetKeyDown("escape") && escapePress == true && finished == false)
         {
-            BallLeftMessage.SetActive(true);
-            audioManager.PlaySFX(audioManager.ballFinish);
-        }
-        else
+            Panel.SetActive(true);
+            inGameMenu.SetActive(true);
+        } 
+        else if (finished == true)
         {
-            GoodJobMessage.SetActive(true);
-            audioManager.PlaySFX(audioManager.finishGame);
-        }
+            FootballerKidLogo.SetActive(false);
+            Panel.SetActive(true);
+            FinishMenu.SetActive(true);
 
+            if (ballLeftFinish)
+            {
+                BallLeftMessage.SetActive(true);
+                audioManager.PlaySFX(audioManager.ballFinish);
+            }
+            else
+            {
+                GoodJobMessage.SetActive(true);
+                audioManager.PlaySFX(audioManager.finishGame);
+                GameManager.instance.GameOver(true);
+            }
+        }
+        
     }
+
     public void ToRestart()
     {
         lateWork = 0;
