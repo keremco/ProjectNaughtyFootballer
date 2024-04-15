@@ -1,62 +1,5 @@
-                        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
 <br/>
 <div align="center">
-<a href="https://github.com/ShaanCoding/ReadME-Generator">
 <img src="https://img.itch.zone/aW1hZ2UvMjY0NzM3Ny8xNTc3NzM1MC5qcGVn/original/M3izgv.jpeg" alt="Logo" width="80" height="80">
 </a>
 <h3 align="center">Footballer Kid</h3>
@@ -92,6 +35,10 @@ Totally It took around 60+ Hours,
 -1+ Hour for Editing FX Sounds
 
 and 22+ Hours for Testing and Bugging
+
+
+<b>This is a prototype and this will be continued to be developed...
+
 
  ## Want to Play?
 
