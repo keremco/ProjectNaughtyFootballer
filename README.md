@@ -35,7 +35,7 @@ Totally It took around 60+ Hours,
 
 -1+ Hour for Editing FX Sounds
 
-and 22+ Hours for Testing and Bugging
+and 22+ Hours for Testing and Debugging
 
 
 <b>This is a prototype and this will be continued to be developed...
